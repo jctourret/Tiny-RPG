@@ -10,6 +10,8 @@ public class PlayerLocomotion : MonoBehaviour
     float sprintSpeed = 5000;
 
     Vector2 direction;
+    [SerializeField]
+    Vector2 velocity;
     bool isSprinting;
 
     Animator animator;
@@ -29,10 +31,12 @@ public class PlayerLocomotion : MonoBehaviour
     private void Update()
     {
         animator.SetFloat("MoveMag",rb.velocity.sqrMagnitude);
+        animator.SetBool("IsSprinting",isSprinting);
     }
     private void FixedUpdate()
     {
         rb.AddForce(direction * (speed + (sprintSpeed * ( isSprinting ? 1 : 0))) * Time.deltaTime, ForceMode2D.Force);
+        velocity = rb.velocity;
     }
 
     public void SetDirection(Vector2 direction)
@@ -44,6 +48,5 @@ public class PlayerLocomotion : MonoBehaviour
     public void SetSprinting(bool sprinting)
     {
         this.isSprinting = sprinting;
-
     }
 }
