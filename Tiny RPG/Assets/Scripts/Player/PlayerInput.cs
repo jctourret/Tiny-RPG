@@ -10,6 +10,8 @@ public class PlayerInput : MonoBehaviour
 
     GameObject mainHand;
     GameObject offHand;
+    [SerializeField]
+    IInteractable interactable;
 
     // Start is called before the first frame update
     void Start()
@@ -45,4 +47,34 @@ public class PlayerInput : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        Debug.Log("Triggered by " + other.name);
+        if(interactable == null)
+        {
+            interactable = other.gameObject.GetComponent<IInteractable>();
+            if (interactable != null)
+            {
+                interactable.ShowPrompt();
+            }
+        }
+    }
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (Input.GetButtonDown("Interact"))
+        {
+            if (interactable != null)
+            {
+                interactable.Interact();
+            }
+        }
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if(interactable != null)
+        {
+            interactable.HidePrompt();
+            interactable = null;
+        }
+    }
 }
