@@ -5,7 +5,6 @@ using UnityEngine;
 public class Hand : MonoBehaviour
 {
     Animator animator;
-    Weapon equippedWeapon;
     float useTimer;
     Collider2D equippedCol;
     public void Start()
@@ -30,14 +29,13 @@ public class Hand : MonoBehaviour
     public void Equip(Weapon newWeapon)
     {
         animator.runtimeAnimatorController = newWeapon.overrideController;
-        equippedWeapon = newWeapon;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         Debug.Log("Hand Triggered by " + collision.name);
         IDamageable damageable = collision.gameObject.GetComponent<IDamageable>();
-        if (damageable != null && equippedWeapon.GetIsAttacking())
+        if (damageable != null)
         {
             damageable.TakeDamage();
         }
@@ -45,11 +43,9 @@ public class Hand : MonoBehaviour
     public void StartAttack()
     {
         equippedCol.enabled = true;
-        equippedWeapon.SetIsAttacking(true);
     }
     public void EndAttack()
     {
         equippedCol.enabled = false;
-        equippedWeapon.SetIsAttacking(false);
     }
 }

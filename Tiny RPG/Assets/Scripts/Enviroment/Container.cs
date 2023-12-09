@@ -15,7 +15,7 @@ public class Container : MonoBehaviour, IInteractable
     {
         canvas.gameObject.SetActive(true);
     }
-    public void Interact()
+    public void Interact(GameObject interactor)
     {
         Destroy(gameObject);
     }

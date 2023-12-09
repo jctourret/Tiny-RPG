@@ -17,13 +17,12 @@ public class Portal : MonoBehaviour, IInteractable
     }
     public void ShowPrompt()
     {
-        canvas.gameObject.SetActive(false);
+        canvas.gameObject.SetActive(true);
     }
-    public void Interact()
+    public void Interact(GameObject interactor)
     {
         SceneManager.LoadScene(destination);
     }
-
     public void HidePrompt()
     {
         canvas.gameObject.SetActive(false);

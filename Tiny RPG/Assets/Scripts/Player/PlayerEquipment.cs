@@ -4,14 +4,12 @@ using UnityEngine;
 
 public class PlayerEquipment : MonoBehaviour
 {
-    public Armor[] armorSlots;
+    Armor[] armorSlots;
 
-    public Weapon[] weaponSlots;
     [SerializeField]
     Hand main;
     [SerializeField]
     Hand off;
-
 
     // Start is called before the first frame update
     void Start()

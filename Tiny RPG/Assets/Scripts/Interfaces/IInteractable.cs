@@ -5,6 +5,6 @@ using UnityEngine;
 public interface IInteractable
 {
     public void ShowPrompt();
-    public void Interact();
+    public void Interact(GameObject interactor);
     public void HidePrompt();
 }

@@ -7,6 +7,7 @@ public class PlayerInput : MonoBehaviour
 {
     PlayerLocomotion locomotion;
     PlayerEquipment equipment;
+    PlayerInventory inventory;
 
     GameObject mainHand;
     GameObject offHand;
@@ -18,12 +19,14 @@ public class PlayerInput : MonoBehaviour
     {
         locomotion = GetComponent<PlayerLocomotion>();
         equipment = GetComponentInChildren<PlayerEquipment>();
+        inventory = GetComponentInChildren<PlayerInventory>();
     }
 
     // Update is called once per frame
     void Update()
     {
         MoveInput();
+        InventoryInput();
         MainHandInput();
         OffHandInput();
     }
@@ -31,6 +34,13 @@ public class PlayerInput : MonoBehaviour
     {
         locomotion.SetDirection(new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")));
         locomotion.SetSprinting(Input.GetButton("Sprint"));
+    }
+    void InventoryInput()
+    {
+        if (Input.GetButtonDown("Inventory"))
+        {
+            inventory.ToggleInventoryUI();
+        }
     }
     void MainHandInput()
     {
@@ -55,6 +65,19 @@ public class PlayerInput : MonoBehaviour
             interactable = other.gameObject.GetComponent<IInteractable>();
             if (interactable != null)
             {
+                Debug.Log("Showing " + other.name + "Prompt");
+                interactable.ShowPrompt();
+            }
+        }
+        else
+        {
+            IInteractable newInteractable;
+            newInteractable = other.gameObject.GetComponent<IInteractable>();
+            if (newInteractable != null)
+            {
+                interactable.HidePrompt();
+                interactable = newInteractable;
+                Debug.Log("Showing " + other.name + "Prompt");
                 interactable.ShowPrompt();
             }
         }
@@ -65,14 +88,17 @@ public class PlayerInput : MonoBehaviour
         {
             if (interactable != null)
             {
-                interactable.Interact();
+                Debug.Log("Interacting with "+ other.name);
+                interactable.Interact(gameObject);
             }
         }
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if(interactable != null)
+        Debug.Log(collision.name + "has exitted trigger.");
+        if (interactable != null && interactable == collision.GetComponent<IInteractable>())
         {
+            Debug.Log("Showing " + collision.name + "Prompt");
             interactable.HidePrompt();
             interactable = null;
         }
