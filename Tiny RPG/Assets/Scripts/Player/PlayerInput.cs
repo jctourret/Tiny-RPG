@@ -7,7 +7,7 @@ public class PlayerInput : MonoBehaviour
 {
     PlayerLocomotion locomotion;
     PlayerEquipment equipment;
-    PlayerInventory inventory;
+    public static Action OnInventoryUIToggle;
 
     GameObject mainHand;
     GameObject offHand;
@@ -19,7 +19,6 @@ public class PlayerInput : MonoBehaviour
     {
         locomotion = GetComponent<PlayerLocomotion>();
         equipment = GetComponentInChildren<PlayerEquipment>();
-        inventory = GetComponentInChildren<PlayerInventory>();
     }
 
     // Update is called once per frame
@@ -39,7 +38,7 @@ public class PlayerInput : MonoBehaviour
     {
         if (Input.GetButtonDown("Inventory"))
         {
-            inventory.ToggleInventoryUI();
+            ToggleInventoryUI();
         }
     }
     void MainHandInput()
@@ -57,6 +56,10 @@ public class PlayerInput : MonoBehaviour
         }
     }
 
+    public void ToggleInventoryUI()
+    {
+        OnInventoryUIToggle?.Invoke();
+    }
     private void OnTriggerEnter2D(Collider2D other)
     {
         Debug.Log("Triggered by " + other.name);

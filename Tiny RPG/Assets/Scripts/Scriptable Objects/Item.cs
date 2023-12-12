@@ -7,7 +7,6 @@ public abstract class Item : ScriptableObject
     public int value;
     public int weight;
     public int stackLimit;
-    public int stack;
     public GameObject owner;
     public abstract void Use();
 }
