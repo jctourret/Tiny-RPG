@@ -9,6 +9,7 @@ public class PlayerLocomotion : MonoBehaviour
     [SerializeField]
     float sprintSpeed = 5000;
 
+    SpriteRenderer spriteRenderer;
     Vector2 direction;
     [SerializeField]
     Vector2 velocity;
@@ -17,6 +18,7 @@ public class PlayerLocomotion : MonoBehaviour
     Animator animator;
     Rigidbody2D rb;
     float linearDrag = 30;
+    Camera cam;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,11 +29,24 @@ public class PlayerLocomotion : MonoBehaviour
             rb.gravityScale = 0;
             rb.drag = linearDrag;
         }
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        cam = Camera.main;
     }
     private void Update()
     {
         animator.SetFloat("MoveMag",rb.velocity.sqrMagnitude);
         animator.SetBool("IsSprinting",isSprinting);
+        Vector3 mouseWorldPosition = cam.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 aimdirection = (mouseWorldPosition - transform.position).normalized;
+        float angle = Mathf.Atan2(aimdirection.y, aimdirection.x) * Mathf.Rad2Deg;
+        if(angle < 90 && angle > -90)
+        {
+            transform.localScale = new Vector3(1,transform.localScale.y, 1);
+        }
+        else
+        {
+            transform.localScale = new Vector3(-1, transform.localScale.y, 1);
+        }
     }
     private void FixedUpdate()
     {

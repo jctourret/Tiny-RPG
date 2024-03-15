@@ -1,0 +1,15 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Steel Shield Controller
+  m_Controller: {fileID: 9100000, guid: cdc00dbbea71bec4eb3e39d527b8691c, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: d79272a142c92b143971f4e6920f6b95, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 2666c54b54d8a4544aa1ff05251586c6, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: be90416dde966c34e9207eea545a5080, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: a74e792c381e78e4a8db87d5746258ed, type: 2}

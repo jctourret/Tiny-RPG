@@ -6,7 +6,6 @@ using UnityEngine;
 public class Armor : Equipment
 {
     ArmorType type;
-    public ArmorSlots slot;
 }
 public enum ArmorType
 {

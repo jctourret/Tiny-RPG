@@ -11,15 +11,26 @@ public class InventoryUI : MonoBehaviour
 
     const int maxColumns = 5;
     const int maxRows = 5;
+
+    [Header("Distribution")]
     [SerializeField]
-    float cellSize = 120f;
+    float cellSizeX = 120f;
+    [SerializeField]
+    float cellSizeY = 120f;
 
     [SerializeField]
     RectTransform container;
     [SerializeField]
     RectTransform slot;
     List<InventoryUISlot> slots = new List<InventoryUISlot>();
+  
+    [Header("Prefabs")]
+    [SerializeField]
+    GameObject wordItemPrefab;
+    [SerializeField]
+    GameObject equipmentPrefab;
 
+    [Header("Inventory Stats")]
     [SerializeField]
     [Range(1, 15)]
     int inventorySpace;
@@ -55,8 +66,9 @@ public class InventoryUI : MonoBehaviour
         {
             if (slots[i].GetItem() != null && slots[i].GetItem().id == newItem.id) //Check matching ID
             {
-                if (slots[i].GetStack() < newItem.stackLimit) // Check stack limit.
+                if (slots[i].GetStack() <= newItem.stackLimit) // Check stack limit.
                 {
+                    slots[i].stack++;
                     slots[i].SetItem(newItem);
                     return true;
                 }
@@ -75,14 +87,6 @@ public class InventoryUI : MonoBehaviour
 
     public void CheckOwnership(Item item, GameObject interactor)
     {
-        if (item.owner == null)
-        {
-            item.owner = gameObject;
-        }
-        else if (item.owner != interactor)
-        {
-            OnItemStolen?.Invoke(interactor, item);
-        }
 
     }
 
@@ -119,7 +123,7 @@ public class InventoryUI : MonoBehaviour
                     RectTransform slotInstance = Instantiate(slot, container).GetComponent<RectTransform>();
                     slotInstance.gameObject.SetActive(true);
                     slotInstance.gameObject.name = "Inventory Slot x:" + j + " y:"+i;
-                    slotInstance.anchoredPosition = new Vector2(j * cellSize, -i * cellSize);
+                    slotInstance.anchoredPosition = new Vector2(j * cellSizeX, -i * cellSizeY);
                     slots.Add(slotInstance.gameObject.GetComponent<InventoryUISlot>());
                 }
                 else

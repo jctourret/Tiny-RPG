@@ -11,26 +11,46 @@ public class PlayerEquipment : MonoBehaviour
     [SerializeField]
     Hand off;
 
+    private void OnEnable()
+    {
+        EquipmentSlot.OnItemEquipped += Equip;
+    }
+
+    private void OnDisable()
+    {
+        EquipmentSlot.OnItemEquipped -= Equip;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        int numSlots = System.Enum.GetNames(typeof(ArmorSlots)).Length;
-        armorSlots = new Armor[numSlots];
+
     }
 
     public void Equip(Equipment equipment)
     {
-
+        switch (equipment.slot)
+        {
+            case Equipment.EquipmentSlots.MainHand:
+                EquipWeapon(equipment as Weapon, main);
+                break;
+            case Equipment.EquipmentSlots.OffHand:
+                EquipWeapon(equipment as Weapon, off);
+                break;
+            default:
+                EquipArmor(equipment as Armor);
+                break;
+        }
     }
 
     public void EquipArmor(Armor armor)
     {
-
+        armorSlots[(int)armor.slot] = armor;
     }
 
-    public void EquipWeapon(Weapon weapon)
+    public void EquipWeapon(Weapon weapon, Hand hand)
     {
-
+        hand.Equip(weapon);
     }
     public void UseMainHand()
     {
@@ -40,18 +60,4 @@ public class PlayerEquipment : MonoBehaviour
     {
         off.Use();
     }
-}
-
-public enum ArmorSlots
-{
-    Helmet,
-    Chest,
-    Legs,
-    Arms,
-    Feet
-}
-public enum WeaponSlot
-{
-    MainHand,
-    OffHand,
 }

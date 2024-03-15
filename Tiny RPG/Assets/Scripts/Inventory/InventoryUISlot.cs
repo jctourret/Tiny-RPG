@@ -4,11 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
+using Unity.VisualScripting;
 
 public class InventoryUISlot : MonoBehaviour, IPointerUpHandler, IPointerDownHandler,
 IDragHandler,IBeginDragHandler, IEndDragHandler, IDropHandler
 { 
-    enum UIElements
+    protected enum UIElements
     {
         slot,
         background,
@@ -20,7 +21,7 @@ IDragHandler,IBeginDragHandler, IEndDragHandler, IDropHandler
     Canvas canvas;
 
     [SerializeField]
-    Item itemInSlot;
+    protected Item itemInSlot;
     public int stack;
 
     [SerializeField]
@@ -31,7 +32,7 @@ IDragHandler,IBeginDragHandler, IEndDragHandler, IDropHandler
     [SerializeField]
     RectTransform[] rectTransforms;
     [SerializeField]
-    Image[] images;
+    protected Image[] images;
 
     TextMeshProUGUI textmesh;
 
@@ -40,10 +41,10 @@ IDragHandler,IBeginDragHandler, IEndDragHandler, IDropHandler
     float verChange = -8.8f;
     float verBgChange = -5f;
 
-    float holdTimer = 0;
-    float holdTime = 0.2f;
+    protected float holdTimer = 0;
+    protected float holdTime = 0.2f;
 
-    bool pointerDown = false;
+    protected bool pointerDown = false;
     bool canDrag = false;
     // Start is called before the first frame update
     void Awake()
@@ -55,12 +56,6 @@ IDragHandler,IBeginDragHandler, IEndDragHandler, IDropHandler
         itemPosition = rectTransforms[(int)UIElements.item].localPosition;
     }
 
-    #region Click
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        PressButton();
-        pointerDown = true;
-    }
     private void Update()
     {
         if (pointerDown)
@@ -78,10 +73,16 @@ IDragHandler,IBeginDragHandler, IEndDragHandler, IDropHandler
             }
         }
     }
+    #region Click
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        PressButton();
+        pointerDown = true;
+    }
     public void OnPointerUp(PointerEventData eventData)
     {
         UnpressButton();
-        if(holdTimer< holdTime)
+        if (holdTimer < holdTime && itemInSlot != null)
         {
             itemInSlot.Use();
             OnItemUsed?.Invoke(itemInSlot);
@@ -89,7 +90,6 @@ IDragHandler,IBeginDragHandler, IEndDragHandler, IDropHandler
         pointerDown = false;
         holdTimer = 0;
     }
-
     void PressButton()
     {
         if (itemInSlot != null)
@@ -104,7 +104,6 @@ IDragHandler,IBeginDragHandler, IEndDragHandler, IDropHandler
             }
         }
     }
-
     void UnpressButton()
     {
         if (itemInSlot != null)
@@ -140,11 +139,11 @@ IDragHandler,IBeginDragHandler, IEndDragHandler, IDropHandler
     #region Drag & Drop
     public void OnBeginDrag(PointerEventData eventData)
     {
-        rectTransforms[((int)UIElements.item)].SetParent(rectTransforms[((int)UIElements.slot)].parent);
+        rectTransforms[((int)UIElements.item)].SetParent(rectTransforms[((int)UIElements.slot)].parent.transform.parent);
     }
     public void OnDrag(PointerEventData eventData)
     {
-        if (canDrag)
+        if (canDrag && Input.GetMouseButton((int)MouseButton.Left))
         {
             rectTransforms[((int)UIElements.item)].position = eventData.position/canvas.scaleFactor;
         }
@@ -165,8 +164,19 @@ IDragHandler,IBeginDragHandler, IEndDragHandler, IDropHandler
         {
             if(itemInSlot == null)
             {
-                SetItem(droppedSlot.itemInSlot);
-                droppedSlot.SetItem(null);
+                if(droppedSlot is EquipmentSlot)
+                {
+                    EquipmentSlot equipSlot = droppedSlot as EquipmentSlot;
+                    SetItem(droppedSlot.itemInSlot);
+                    equipSlot.SetItem(null);
+                }
+                else
+                {
+                    stack = droppedSlot.stack;
+                    SetItem(droppedSlot.itemInSlot);
+                    droppedSlot.SetItem(null);
+                    droppedSlot.stack = 0;
+                }
                 Debug.Log("item passed");
             }
             else
@@ -183,7 +193,7 @@ IDragHandler,IBeginDragHandler, IEndDragHandler, IDropHandler
     {
         return itemInSlot;
     }
-    public void SetItem(Item newItem)
+    public virtual void SetItem(Item newItem)
     {
         if(newItem != null)
         {

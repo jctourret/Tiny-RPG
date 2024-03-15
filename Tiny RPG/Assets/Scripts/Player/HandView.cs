@@ -2,10 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HandEventHelper : MonoBehaviour
+public class HandView : MonoBehaviour
 {
-    [SerializeField]
     Hand hand;
+    public SpriteRenderer spriteRenderer;
+
+    private void Start()
+    {
+        hand  = GetComponentInParent <Hand>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+    }
     public void StartAttack()
     {
         hand.StartAttack();

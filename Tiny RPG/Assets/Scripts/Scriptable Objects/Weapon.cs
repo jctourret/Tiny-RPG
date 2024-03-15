@@ -6,7 +6,11 @@ using UnityEngine;
 public class Weapon : Equipment
 {
     public AnimatorOverrideController overrideController;
-    public WeaponSlot slot;
+    [Header("Placement & collision")]
+    public Vector3 posOffset;
+    public Vector3 rotOffset;
+    public Vector2 colliderSize;
+    public Vector2 colliderOffset;
     bool isAttacking;
     public override void Use()
     {

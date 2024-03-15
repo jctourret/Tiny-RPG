@@ -6,7 +6,7 @@ AnimatorOverrideController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Shield Controller
+  m_Name: Wooden Shield Controller
   m_Controller: {fileID: 9100000, guid: cdc00dbbea71bec4eb3e39d527b8691c, type: 2}
   m_Clips:
   - m_OriginalClip: {fileID: 7400000, guid: be90416dde966c34e9207eea545a5080, type: 2}
