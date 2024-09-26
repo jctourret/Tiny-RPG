@@ -5,25 +5,23 @@ using UnityEngine.SceneManagement;
 
 public class Portal : MonoBehaviour, IInteractable
 {
-    Animator animator;
     [SerializeField]
-    string destination;
-    [SerializeField]
+    SceneList.Scenes destination;
     Canvas canvas;
     // Start is called before the first frame update
     void Start()
     {
-        animator = GetComponent<Animator>();
+        canvas = gameObject.GetComponentInChildren<Canvas>();
     }
-    public void ShowPrompt()
+    public void EnterInteractionRange()
     {
         canvas.gameObject.SetActive(true);
     }
-    public void Interact(GameObject interactor)
+    public void Interact()
     {
-        SceneManager.LoadScene(destination);
+        SceneManager.LoadScene((int)destination);
     }
-    public void HidePrompt()
+    public void ExitInteractionRange()
     {
         canvas.gameObject.SetActive(false);
     }

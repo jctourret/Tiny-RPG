@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,24 +6,30 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Weapon", menuName = "Inventory/Weapon")]
 public class Weapon : Equipment
 {
+
+    public enum WeaponCollider
+    {
+        Box,
+        Capsule
+    }
+
     public AnimatorOverrideController overrideController;
-    [Header("Placement & collision")]
+    [Header("Transform")]
     public Vector3 posOffset;
-    public Vector3 rotOffset;
+    public float rotOffset;
+
+    [Header("Collider")]
+    public WeaponCollider collider;
     public Vector2 colliderSize;
     public Vector2 colliderOffset;
-    bool isAttacking;
-    public override void Use()
+
+    public virtual void Use()
     {
 
     }
 
-    public bool GetIsAttacking()
+    public virtual void EndUse()
     {
-        return isAttacking;
-    }
-    public void SetIsAttacking(bool attacking)
-    {
-        isAttacking = attacking;
+
     }
 }

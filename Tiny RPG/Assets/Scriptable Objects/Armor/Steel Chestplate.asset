@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b61793132ecfd64b8e6b90db53d6428, type: 3}
   m_Name: Steel Chestplate
   m_EditorClassIdentifier: 
-  name: 
+  name: Steel Chestplate
   id: 7
-  sprite: {fileID: 0}
-  value: 0
+  sprite: {fileID: 208582091, guid: 726e12a35a8573b43873c0f26aa48a12, type: 3}
+  value: 20
   weight: 0
   stackLimit: 0
   damageMod: 0
-  defenseMod: 0
-  slot: 0
+  knockback: 0
+  defenseMod: 5
+  slot: 1

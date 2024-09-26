@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8386370231245922271}
   - component: {fileID: 3163255443671687729}
   - component: {fileID: 1955031522809950803}
+  - component: {fileID: 1355682527821579886}
   m_Layer: 0
   m_Name: Sword
   m_TagString: Untagged
@@ -146,6 +147,33 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canvas: {fileID: 7888739908873918194}
   currentItem: {fileID: 11400000, guid: 33026d6cb00788a459b385d349413838, type: 2}
+--- !u!50 &1355682527821579886
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4570540098250632719}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
 --- !u!1001 &4941110711057002177
 PrefabInstance:
   m_ObjectHideFlags: 0

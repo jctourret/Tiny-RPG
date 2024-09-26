@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class WorldItem : MonoBehaviour, IInteractable
 {
-    public static Func<Item, GameObject, bool> OnItemPickUp;
+    public static Func<Item, bool> OnItemPickUp;
     [SerializeField]
     Canvas canvas;
     [SerializeField]
@@ -13,28 +13,43 @@ public class WorldItem : MonoBehaviour, IInteractable
     new SpriteRenderer renderer;
     private void Awake()
     {
-        gameObject.name = currentItem.name;
         renderer = gameObject.GetComponent<SpriteRenderer>();
-        renderer.sprite = currentItem.sprite;
+        UpdateItem();
     }
-    public void ShowPrompt()
+    public void EnterInteractionRange()
     {
         canvas.gameObject.SetActive(true);
     }
-    public void Interact(GameObject interactor)
+    public void Interact()
     {
-        PickUpItem(interactor);
+        PickUpItem();
     }
-    public void HidePrompt()
+    public void ExitInteractionRange()
     {
         canvas.gameObject.SetActive(false);
     }
-    public void PickUpItem(GameObject interactor)
+    public void PickUpItem()
     {
         Debug.Log("Picking up" + currentItem.name);
-        if (OnItemPickUp?.Invoke(currentItem, interactor) == true)
+        if (OnItemPickUp?.Invoke(currentItem) == true)
         {
             Destroy(gameObject);
         }
+    }
+    public void SetItem(Item newItem)
+    {
+        currentItem = newItem;
+        UpdateItem();
+    }
+
+    public Item GetItem()
+    {
+        return currentItem;
+    }
+
+    public void UpdateItem()
+    {
+        gameObject.name = currentItem.name;
+        renderer.sprite = currentItem.sprite;
     }
 }

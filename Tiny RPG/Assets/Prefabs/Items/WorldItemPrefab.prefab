@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7349656317291678230}
   - component: {fileID: 3451255961336016625}
   - component: {fileID: 8667511657226238475}
+  - component: {fileID: -2135051006130864528}
   m_Layer: 0
   m_Name: WorldItemPrefab
   m_TagString: Untagged
@@ -116,7 +117,7 @@ CapsuleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -136,6 +137,33 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canvas: {fileID: 4803818518838369705}
   currentItem: {fileID: 0}
+--- !u!50 &-2135051006130864528
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8384435298226286651}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
 --- !u!1001 &7728918409852970394
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -206,11 +234,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1638276598347425508, guid: 7c13dcb2ff799354b8c65cf83961f2e8, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 1.8089789
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1638276598347425508, guid: 7c13dcb2ff799354b8c65cf83961f2e8, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.5828163
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1638276598347425508, guid: 7c13dcb2ff799354b8c65cf83961f2e8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

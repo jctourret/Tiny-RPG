@@ -5,8 +5,9 @@ using UnityEngine;
 public class HealthPotion : Consumable
 {
     public int healthRestored;
-    public override void Use()
+
+    public override void Use(CharacterStats character)
     {
-        base.Use();
+        character.SetHitPoints(healthRestored + character.GetHitPoints());
     }
 }

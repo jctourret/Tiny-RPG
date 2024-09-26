@@ -18,7 +18,7 @@ IDragHandler,IBeginDragHandler, IEndDragHandler, IDropHandler
 
     public static Action<Item> OnItemUsed;
 
-    Canvas canvas;
+    protected Canvas canvas;
 
     [SerializeField]
     protected Item itemInSlot;
@@ -30,13 +30,13 @@ IDragHandler,IBeginDragHandler, IEndDragHandler, IDropHandler
     Sprite unpressedSprite;
 
     [SerializeField]
-    RectTransform[] rectTransforms;
+    protected RectTransform[] rectTransforms;
     [SerializeField]
     protected Image[] images;
 
     TextMeshProUGUI textmesh;
 
-    Vector3 itemPosition;
+    protected Vector3 itemPosition;
 
     float verChange = -8.8f;
     float verBgChange = -5f;
@@ -45,7 +45,7 @@ IDragHandler,IBeginDragHandler, IEndDragHandler, IDropHandler
     protected float holdTime = 0.2f;
 
     protected bool pointerDown = false;
-    bool canDrag = false;
+    protected bool canDrag = false;
     // Start is called before the first frame update
     void Awake()
     {
@@ -56,7 +56,7 @@ IDragHandler,IBeginDragHandler, IEndDragHandler, IDropHandler
         itemPosition = rectTransforms[(int)UIElements.item].localPosition;
     }
 
-    private void Update()
+    protected void Update()
     {
         if (pointerDown)
         {
@@ -74,17 +74,17 @@ IDragHandler,IBeginDragHandler, IEndDragHandler, IDropHandler
         }
     }
     #region Click
-    public void OnPointerDown(PointerEventData eventData)
+    public virtual void OnPointerDown(PointerEventData eventData)
     {
         PressButton();
         pointerDown = true;
     }
-    public void OnPointerUp(PointerEventData eventData)
+    public virtual void OnPointerUp(PointerEventData eventData)
     {
         UnpressButton();
+        Debug.Log("inv pointer Up");
         if (holdTimer < holdTime && itemInSlot != null)
         {
-            itemInSlot.Use();
             OnItemUsed?.Invoke(itemInSlot);
         }
         pointerDown = false;
@@ -104,7 +104,7 @@ IDragHandler,IBeginDragHandler, IEndDragHandler, IDropHandler
             }
         }
     }
-    void UnpressButton()
+    protected void UnpressButton()
     {
         if (itemInSlot != null)
         {
@@ -137,11 +137,12 @@ IDragHandler,IBeginDragHandler, IEndDragHandler, IDropHandler
     #endregion
 
     #region Drag & Drop
-    public void OnBeginDrag(PointerEventData eventData)
+    public virtual void OnBeginDrag(PointerEventData eventData)
     {
         rectTransforms[((int)UIElements.item)].SetParent(rectTransforms[((int)UIElements.slot)].parent.transform.parent);
     }
-    public void OnDrag(PointerEventData eventData)
+
+    public virtual void OnDrag(PointerEventData eventData)
     {
         if (canDrag && Input.GetMouseButton((int)MouseButton.Left))
         {
@@ -149,14 +150,13 @@ IDragHandler,IBeginDragHandler, IEndDragHandler, IDropHandler
         }
     }
 
-    public void OnEndDrag(PointerEventData eventData)
+    public virtual void OnEndDrag(PointerEventData eventData)
     {
         canDrag = false;
         rectTransforms[((int)UIElements.item)].SetParent(rectTransforms[(int)UIElements.background],false);
         rectTransforms[((int)UIElements.item)].localPosition = itemPosition;
-
     }
-    public void OnDrop(PointerEventData eventData)
+    public virtual void OnDrop(PointerEventData eventData)
     {
         Debug.Log( eventData.pointerDrag.name + " was dropped on " + gameObject.name);
         InventoryUISlot droppedSlot = eventData.pointerDrag.GetComponent<InventoryUISlot>();
@@ -169,6 +169,11 @@ IDragHandler,IBeginDragHandler, IEndDragHandler, IDropHandler
                     EquipmentSlot equipSlot = droppedSlot as EquipmentSlot;
                     SetItem(droppedSlot.itemInSlot);
                     equipSlot.SetItem(null);
+                }
+                else if (droppedSlot is ShopSlot)
+                {
+                    ShopSlot shopSlot = droppedSlot as ShopSlot;
+                    ShopSlot.OnItemBought?.Invoke(shopSlot.GetItem());
                 }
                 else
                 {
@@ -195,19 +200,17 @@ IDragHandler,IBeginDragHandler, IEndDragHandler, IDropHandler
     }
     public virtual void SetItem(Item newItem)
     {
-        if(newItem != null)
+        if(newItem != null) //Was I given a non null item?
         {
-            if(itemInSlot == newItem)
-            {
-                stack++;
-            }
-            else
+            if(itemInSlot != newItem) //Is it a different item I have?
             {
                 itemInSlot = newItem;
                 images[(int)UIElements.item].sprite = itemInSlot.sprite;
                 images[(int)UIElements.item].color = Color.white;
+                stack = 0; //Reset the numbers of items stacked.
             }
-            if (stack > 1)
+            stack++; //I have one more of this item
+            if (stack > 1) //only write the number if there is more than one. 
             {
                 textmesh.text = stack.ToString();
             }

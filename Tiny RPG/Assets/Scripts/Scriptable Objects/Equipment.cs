@@ -17,10 +17,12 @@ public class Equipment : Item
     }
     [Header("Statistics")]
     public int damageMod;
+    public int knockback;
     public int defenseMod;
     public EquipmentSlots slot;
-    public override void Use()
-    {
 
+    public int GetKnockback()
+    {
+        return knockback;
     }
 }

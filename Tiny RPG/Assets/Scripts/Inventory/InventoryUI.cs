@@ -3,11 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
+using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 
 public class InventoryUI : MonoBehaviour
 {
     public static Action<GameObject, Item> OnItemStolen;
+    public static Action<int> OnWealthUpdate;
 
     const int maxColumns = 5;
     const int maxRows = 5;
@@ -27,26 +29,30 @@ public class InventoryUI : MonoBehaviour
     [Header("Prefabs")]
     [SerializeField]
     GameObject wordItemPrefab;
-    [SerializeField]
-    GameObject equipmentPrefab;
 
     [Header("Inventory Stats")]
     [SerializeField]
     [Range(1, 15)]
     int inventorySpace;
+    [SerializeField]
+    int currentWealth;
 
     GameObject view;
 
     private void OnEnable()
     {
         WorldItem.OnItemPickUp += Add;
-        PlayerInput.OnInventoryUIToggle += ToggleView;
+        PlayerController.OnInventoryUIToggle += ToggleView;
+        ShopSlot.OnItemBought += AddBoughtItem;
+        ShopSlot.OnItemSold += RemoveSoldItem;
     }
 
     private void OnDisable()
     {
-        WorldItem.OnItemPickUp += Add;
-        PlayerInput.OnInventoryUIToggle -= ToggleView;
+        WorldItem.OnItemPickUp -= Add;
+        PlayerController.OnInventoryUIToggle -= ToggleView;
+        ShopSlot.OnItemBought -= AddBoughtItem;
+        ShopSlot.OnItemSold -= RemoveSoldItem;
     }
     private void Start()
     {
@@ -58,37 +64,42 @@ public class InventoryUI : MonoBehaviour
         view.SetActive(!view.activeSelf);
     }
     #region Add & Remove
-    public bool Add(Item newItem, GameObject interactor)
+    public bool Add(Item newItem)
     {
-        CheckOwnership(newItem, interactor);
+        if(newItem is Coin)
+        {
+            SetCurrentWealth(GetCurrentWealth()+newItem.value);
+            return true;
+        }
 
-        for (int i = 0; i < slots.Count; i++) //Checking every single slot, even the empty ones.
+        for (int i = 0; i < slots.Count; i++) //Checking every single slot for a duplicate, even the empty ones.
         {
             if (slots[i].GetItem() != null && slots[i].GetItem().id == newItem.id) //Check matching ID
             {
-                if (slots[i].GetStack() <= newItem.stackLimit) // Check stack limit.
+                if (slots[i].GetStack()+1 <= newItem.stackLimit) // If ID matches. Check stack limit.
                 {
-                    slots[i].stack++;
                     slots[i].SetItem(newItem);
                     return true;
                 }
             }
         }
-        for (int i = 0; i < slots.Count; i++)
+        for (int i = 0; i < slots.Count; i++) //Since there were no duplicates, fill the first empty slot you find.
         {
-            if (slots[i].GetItem() == null)
+            if (slots[i].GetItem() == null) //is the slot empty?
             {
-                slots[i].SetItem(newItem);
+                slots[i].SetItem(newItem); //fill the slot.
                 return true;
             }
         }
         return false;
     }
 
-    public void CheckOwnership(Item item, GameObject interactor)
+    void AddBoughtItem(Item newItem)
     {
-
+        SetCurrentWealth(GetCurrentWealth() - newItem.value);
+        Add(newItem);
     }
+
 
     public void Remove(Item itemToRemove)
     {
@@ -108,8 +119,21 @@ public class InventoryUI : MonoBehaviour
             }
         }
     }
+    
+    void RemoveSoldItem(Item newItem)
+    {
+        SetCurrentWealth(GetCurrentWealth() + newItem.value);
+        Remove(newItem);
+    }
 
-#endregion
+    #endregion
+
+
+    public void CheckOwnership(Item item, GameObject interactor)
+    {
+
+    }
+
 
     #region Init and Refresh
     public void Init(int inventorySpace)
@@ -141,6 +165,20 @@ public class InventoryUI : MonoBehaviour
         {
             slots[i].SetItem(slots[i].GetItem());
         }
+        OnWealthUpdate?.Invoke(currentWealth);
     }
     #endregion
+
+
+    public int GetCurrentWealth()
+    {
+        return currentWealth;
+    }
+
+    public void SetCurrentWealth(int newWealth)
+    {
+        currentWealth = newWealth;
+        OnWealthUpdate?.Invoke(currentWealth); //Es poco ortodoxo, pero si estoy llamando a SetCurrentWealth siempre voy a querer updatear lo pertinente.
+    }
+
 }

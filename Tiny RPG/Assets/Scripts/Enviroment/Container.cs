@@ -11,15 +11,15 @@ public class Container : MonoBehaviour, IInteractable
     [SerializeField]
     Sprite pressed;
 
-    public void ShowPrompt()
+    public void EnterInteractionRange()
     {
         canvas.gameObject.SetActive(true);
     }
-    public void Interact(GameObject interactor)
+    public void Interact()
     {
         Destroy(gameObject);
     }
-    public void HidePrompt()
+    public void ExitInteractionRange()
     {
         canvas.gameObject.SetActive(false);
     }

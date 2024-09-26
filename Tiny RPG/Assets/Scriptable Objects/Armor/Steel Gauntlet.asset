@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b61793132ecfd64b8e6b90db53d6428, type: 3}
   m_Name: Steel Gauntlet
   m_EditorClassIdentifier: 
-  name: 
+  name: Steel Guantlet
   id: 0
-  sprite: {fileID: -1719978145, guid: ac910a504755e90449ba5015b2da301b, type: 3}
-  value: 0
+  sprite: {fileID: -437245569, guid: 726e12a35a8573b43873c0f26aa48a12, type: 3}
+  value: 10
   weight: 0
   stackLimit: 0
   damageMod: 0
-  defenseMod: 0
-  slot: 0
+  knockback: 0
+  defenseMod: 5
+  slot: 3

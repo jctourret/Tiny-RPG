@@ -15,6 +15,12 @@ EditorBuildSettings:
     path: Assets/Scenes/Town.unity
     guid: f43b2f752cf7dac44b46fb6af7bdc37c
   - enabled: 1
-    path: Assets/Scenes/Dungeon.unity
+    path: Assets/Scenes/Dungeon - Entrance.unity
+    guid: 255a1beb4e77ffd4db4706aa9c30076e
+  - enabled: 1
+    path: Assets/Scenes/Dungeon - First Floor.unity
+    guid: 22c063c65a8e7cd4cb09b51e67dfbaa3
+  - enabled: 1
+    path: Assets/Scenes/Dungeon - Boss Room.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
   m_configObjects: {}

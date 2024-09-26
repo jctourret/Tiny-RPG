@@ -7,6 +7,6 @@ public abstract class Item : ScriptableObject
     public Sprite sprite;
     public int value;
     public int weight;
+    [Range(1, 99)]
     public int stackLimit;
-    public abstract void Use();
 }

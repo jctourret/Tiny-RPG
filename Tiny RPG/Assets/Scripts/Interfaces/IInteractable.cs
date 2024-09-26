@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface IInteractable
 {
-    public void ShowPrompt();
-    public void Interact(GameObject interactor);
-    public void HidePrompt();
+    public void EnterInteractionRange();
+    public void Interact();
+    public void ExitInteractionRange();
 }
